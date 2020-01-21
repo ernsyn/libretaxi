@@ -29,6 +29,7 @@
  */
 const localeMap = new Map();
 localeMap.set('en', 'English');
+localeMap.set('ru', '🇷🇺 Русский');
 localeMap.set('es', 'Español');
 localeMap.set('fa', 'فارسی');
 localeMap.set('zh-cn', '官话');
@@ -39,17 +40,20 @@ localeMap.set('de', 'Deutsch');
 localeMap.set('it', '🇮🇹 Italiano');
 localeMap.set('pt-br', '🇧🇷 Português');
 localeMap.set('sv', '🇸🇪 Svenska');
+localeMap.set('fi', '🇫🇮 Suomi');
 localeMap.set('pl', '🇵🇱 Polski');
 localeMap.set('cz', '🇨🇿 Česky');
 localeMap.set('tr', '🇹🇷 Türkçe');
 localeMap.set('am', '🇦🇲 Հայերեն');
-localeMap.set('ru', '🇷🇺 Русский');
 localeMap.set('ua', '🇺🇦 Українська');
 localeMap.set('ro', '🇷🇴 Română');
 localeMap.set('hi', 'हिन्दी');
 localeMap.set('ta', 'தமிழ்');
 localeMap.set('id', '🇮🇩 Bahasa Indonesia');
 localeMap.set('vi', '🇻🇳 Tiếng Việt');
+localeMap.set('ki', 'Kiribati');
+localeMap.set('ku', 'کوردی 🇹🇯');
+localeMap.set('ar', 'عربي');
 
 /**
  * @typedef SupportedLocales

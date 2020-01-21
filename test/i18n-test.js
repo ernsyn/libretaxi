@@ -21,7 +21,7 @@ import walk from 'walk';
 import oboe from 'oboe';
 import fs from 'fs';
 
-const NUM_OF_LOCALIZATIONS = 22;
+const NUM_OF_LOCALIZATIONS = 26;
 
 test.cb('locales should have all keys from en.json, except *_desc', t => {
   t.plan(NUM_OF_LOCALIZATIONS - 1);
@@ -82,7 +82,7 @@ test.cb('locales except en.json should not have keys ending with _desc', t => {
 
       for (const key of Object.keys(xx)) {
         if (key.endsWith('_desc')) {
-          t.fail(`'${stat.name}' cannot contani keys ending with '_desc', but '${key}' was found.`);
+          t.fail(`'${stat.name}' cannot contain keys ending with '_desc', but '${key}' was found.`);
         }
       }
 
@@ -149,6 +149,49 @@ test.cb('locales should not have long keys with {{phone}}', t => {
         if (Object.keys(tree).length > 0) { t.pass(); } else { t.fail(); }
         next();
       });
+  });
+
+  walker.on('end', () => {
+    t.end();
+  });
+});
+
+// compare the number of "what" in str1 and str2, return false if not equal
+const calcMatch = (str1, str2, what) => {
+  const re = new RegExp(what, 'g');
+  const cnt1 = (str1.match(re) || []).length;
+  const cnt2 = (str2.match(re) || []).length;
+  return cnt1 === cnt2;
+};
+
+test.cb('all translations should have the same number of format tags', t => {
+  t.plan(NUM_OF_LOCALIZATIONS - 1);
+  const walker = walk.walk('../locales', { followLinks: false });
+  const en = require('../locales/en.json'); // eslint-disable-line global-require
+
+  // walk through each file, except en.json
+  walker.on('file', (root, stat, next) => {
+    if (stat.name !== 'en.json') {
+      const path = `${root}/${stat.name}`;
+      const xx = require(path); // eslint-disable-line global-require
+
+      for (const key of Object.keys(en)) {
+        if (key.endsWith('_desc')) continue;
+
+        if (!calcMatch(en[key], xx[key], '%')) {
+          t.fail(`Number of % for ${key} in en.json and ${stat.name} is different`);
+        }
+        if (!calcMatch(en[key], xx[key], '{')) {
+          t.fail(`Number of {{ for ${key} in en.json and ${stat.name} is different`);
+        }
+        if (!calcMatch(en[key], xx[key], '}')) {
+          t.fail(`Number of }} for ${key} in en.json and ${stat.name} is different`);
+        }
+      }
+      t.pass();
+    }
+
+    next();
   });
 
   walker.on('end', () => {
